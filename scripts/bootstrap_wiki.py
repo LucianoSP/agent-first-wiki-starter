@@ -133,7 +133,7 @@ def count_pending_raw_entries(path: Path) -> int:
     total = 0
     for p in path.glob('*.md'):
         text = p.read_text(encoding='utf-8', errors='replace')
-        if '\nstatus: pending\n' in text or text.startswith('---\nstatus: pending\n'):
+        if '\\nstatus: pending\\n' in text or text.startswith('---\\nstatus: pending\\n'):
             total += 1
     return total
 
