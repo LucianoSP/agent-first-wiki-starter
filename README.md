@@ -66,7 +66,9 @@ python3 /path/to/wiki/scripts/bootstrap_router.py /path/to/wiki
 
 ### 3. Configure routing
 
-Edit:
+Default recommendation: keep `openai-codex` with `gpt-5.4` if your local Hermes installation already has working OAuth.
+
+Edit if needed:
 
 ```text
 /path/to/wiki/meta/ROUTER/router_config.json
@@ -74,11 +76,12 @@ Edit:
 
 Set at least:
 
+- `provider` if you want to switch away from the default `openai-codex`
 - `model`
-- `api_key_env`
-- `base_url` if needed for your provider
+- `hermes_agent_path` and `hermes_python` if using `openai-codex` from a non-default Hermes install
+- `api_key_env` and `base_url` if using a normal OpenAI-compatible endpoint
 
-Export the API key expected by `api_key_env`.
+If you keep `openai-codex`, no separate API key export is needed beyond the working Hermes OAuth setup. If you switch to `openai_compatible`, export the API key expected by `api_key_env`.
 
 ### 4. Create a test raw entry
 
@@ -109,6 +112,10 @@ If routing fails because of provider errors, missing API keys, invalid JSON, or 
 - cleanup and status scripts reflect that state
 
 That behavior is deliberate. The kit avoids silent fallback that would hide routing problems.
+
+## Recommended router default
+
+Local benchmark results currently favor `gpt-5.4` over Gemini for this starter kit, especially on over-creation control and zero-failure behavior.
 
 ## Who this is for
 

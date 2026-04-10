@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import subprocess
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -96,16 +97,64 @@ def invoke_openai_compatible(prompt: str, config: dict) -> str:
         raise RouterError(f'Unexpected provider response shape: {raw}') from exc
 
 
+def invoke_openai_codex(prompt: str, config: dict) -> str:
+    model = config.get('model') or 'gpt-5.4'
+    hermes_agent_path = config.get('hermes_agent_path') or os.environ.get('HERMES_AGENT_PATH') or '/root/.hermes/hermes-agent'
+    hermes_python = config.get('hermes_python') or os.environ.get('HERMES_VENV_PYTHON') or f'{hermes_agent_path}/venv/bin/python'
+
+    script = f"""
+import json, sys
+sys.path.insert(0, {hermes_agent_path!r})
+from agent.auxiliary_client import resolve_provider_client
+client, resolved_model = resolve_provider_client('openai-codex', {model!r}, async_mode=False)
+if client is None:
+    raise SystemExit('Failed to resolve openai-codex client')
+resp = client.chat.completions.create(
+    model={model!r},
+    messages=[
+        {{'role':'system','content':'You must return strict JSON only.'}},
+        {{'role':'user','content':{prompt!r}}},
+    ]
+)
+content = resp.choices[0].message.content or ''
+print(content)
+"""
+    try:
+        proc = subprocess.run(
+            [hermes_python, '-c', script],
+            capture_output=True,
+            text=True,
+            timeout=180,
+            check=False,
+        )
+    except FileNotFoundError as exc:
+        raise RouterError(f'Configured Hermes Python not found: {hermes_python}') from exc
+    except subprocess.TimeoutExpired as exc:
+        raise RouterError('openai-codex router call timed out') from exc
+
+    if proc.returncode != 0:
+        detail = (proc.stderr or proc.stdout).strip()
+        raise RouterError(f'openai-codex call failed: {detail}')
+
+    content = proc.stdout.strip()
+    if not content:
+        raise RouterError('openai-codex returned empty content')
+    return content
+
+
 def route_entry(root: Path, entry_id: str, metadata: dict, body: str) -> tuple[RoutingDecision, dict]:
     config = load_router_config(root)
     prompt = build_prompt(root, metadata, body)
     prompt_path = save_prompt_preview(root, entry_id, prompt)
 
-    provider = config.get('provider', 'openai_compatible')
-    if provider != 'openai_compatible':
+    provider = config.get('provider', 'openai-codex')
+    if provider == 'openai_compatible':
+        raw_response = invoke_openai_compatible(prompt, config)
+    elif provider == 'openai-codex':
+        raw_response = invoke_openai_codex(prompt, config)
+    else:
         raise RouterError(f'Unsupported provider in starter kit: {provider}')
 
-    raw_response = invoke_openai_compatible(prompt, config)
     response_path = save_raw_response(root, entry_id, raw_response)
     decision = parse_and_validate(raw_response)
     meta = {

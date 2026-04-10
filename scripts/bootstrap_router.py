@@ -12,10 +12,12 @@ import sys
 from pathlib import Path
 
 CONFIG_TEMPLATE = {
-    "provider": "openai_compatible",
-    "model": "replace-me",
+    "provider": "openai-codex",
+    "model": "gpt-5.4",
+    "hermes_agent_path": "/root/.hermes/hermes-agent",
+    "hermes_python": "/root/.hermes/hermes-agent/venv/bin/python",
     "api_key_env": "WIKI_ROUTER_API_KEY",
-    "base_url": "https://api.openai.com/v1",
+    "base_url": "https://chatgpt.com/backend-api/codex",
     "temperature": 0,
     "max_output_tokens": 900,
 }
@@ -24,14 +26,21 @@ README = """# Router setup
 
 This wiki expects LLM routing.
 
+## Recommended default
+Use `openai-codex` with `gpt-5.4` when Hermes is installed locally with working OAuth.
+
 ## Minimal setup
-1. Export an API key in the environment variable named by `api_key_env`.
-2. Edit `router_config.json` with the provider-compatible `model`.
-3. Keep the provider OpenAI-compatible unless you also adapt `scripts/lib/router.py`.
+1. Run this script after `bootstrap_wiki.py`.
+2. Keep `provider` as `openai-codex` if you want to use the same GPT-5.4 path as Hermes.
+3. Confirm `hermes_agent_path` and `hermes_python` point to a real Hermes installation.
 4. Test with a real raw entry and run `scripts/absorb.py`.
 
-## Environment example
-export WIKI_ROUTER_API_KEY='...'
+## Alternative setup
+If you want a normal OpenAI-compatible endpoint instead, switch:
+- `provider` to `openai_compatible`
+- `model` to the desired model
+- `base_url` to the provider base URL
+- `api_key_env` to the environment variable containing the API key
 
 ## Failure policy
 If routing fails, the entry must move to manual review or failed state with visible artifacts under `meta/ROUTER/`.
