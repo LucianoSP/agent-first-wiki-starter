@@ -1,0 +1,92 @@
+[
+  {
+    "id": "project-health-sentinel",
+    "title": "Projeto Health Sentinel",
+    "body": "Health Sentinel é um app pessoal com IA para exames, terapias, snapshot e analytics. Esta entrada descreve o projeto principal do usuário e suas metas.",
+    "expected": {
+      "must_include": ["mind/projects"],
+      "allowed": ["mind/projects", "world/entities", "mind/themes"]
+    }
+  },
+  {
+    "id": "person-luciano-preferences",
+    "title": "Pessoa Luciano Pacheco",
+    "body": "Luciano Pacheco prefere português, quer horários em BRT e desenvolve apps pessoais com IA. Esta entrada descreve preferências pessoais e contexto do operador da wiki.",
+    "expected": {
+      "must_include": ["mind/people"],
+      "allowed": ["mind/people", "mind/themes", "mind/patterns"]
+    }
+  },
+  {
+    "id": "concept-llm-routing",
+    "title": "Conceito de roteamento LLM",
+    "body": "Roteamento por LLM decide se uma informação pertence em mind ou world, quais páginas criar e quais páginas atualizar. A falha deve ser visível e nunca escondida por fallback silencioso.",
+    "expected": {
+      "must_include": ["world/concepts"],
+      "allowed": ["world/concepts", "mind/patterns", "mind/decisions"]
+    }
+  },
+  {
+    "id": "decision-no-silent-fallback",
+    "title": "Decisão sobre fallbacks silenciosos",
+    "body": "O sistema não deve esconder falhas de roteamento com fallback silencioso. Erros devem ir para manual review com artifacts explícitos.",
+    "expected": {
+      "must_include": ["mind/decisions"],
+      "allowed": ["mind/decisions", "mind/patterns", "world/concepts"]
+    }
+  },
+  {
+    "id": "domain-travel-intelligence",
+    "title": "Domínio de travel intelligence",
+    "body": "Travel intelligence combina busca, comparação, monitoramento contínuo, custo total e recomendação explicável para viagens.",
+    "expected": {
+      "must_include": ["world/domains"],
+      "allowed": ["world/domains", "world/concepts", "mind/projects"]
+    }
+  },
+  {
+    "id": "source-blog-post",
+    "title": "Fonte blog post sobre roteamento",
+    "body": "Artigo externo discute técnicas de roteamento para agentes e compara heurísticas com modelos maiores. Esta entrada resume uma fonte externa específica.",
+    "expected": {
+      "must_include": ["world/sources"],
+      "allowed": ["world/sources", "world/concepts", "world/comparisons"]
+    }
+  },
+  {
+    "id": "comparison-gpt-vs-gemini",
+    "title": "Comparação GPT vs Gemini para roteamento",
+    "body": "GPT-5.4 tende a ser o padrão desejado para casos complexos. Gemini Flash pode ser útil em triagem barata. Esta entrada compara modelos para roteamento da wiki.",
+    "expected": {
+      "must_include": ["world/comparisons"],
+      "allowed": ["world/comparisons", "world/concepts", "mind/decisions"]
+    }
+  },
+  {
+    "id": "pattern-morning-symptom-correlation",
+    "title": "Padrão de correlação sintoma e medicação",
+    "body": "Moleza ao acordar pode estar associada ao uso de Miosan na noite anterior. Esta entrada representa um padrão observado, ainda não conclusivo.",
+    "expected": {
+      "must_include": ["mind/patterns"],
+      "allowed": ["mind/patterns", "mind/timelines", "world/concepts"]
+    }
+  },
+  {
+    "id": "timeline-asia-2026",
+    "title": "Linha do tempo Ásia Outono 2026",
+    "body": "Projeto ativo de viagem para Ásia Outono 2026, com próximos marcos de pesquisa de voos, definição de janela e revisão de custos totais.",
+    "expected": {
+      "must_include": ["mind/timelines"],
+      "allowed": ["mind/timelines", "mind/projects", "mind/themes"]
+    }
+  },
+  {
+    "id": "query-best-router-model",
+    "title": "Pergunta sobre melhor modelo de roteamento",
+    "body": "Qual modelo entrega melhor equilíbrio entre qualidade semântica, JSON válido e custo para roteamento da wiki?",
+    "expected": {
+      "must_include": ["mind/queries"],
+      "allowed": ["mind/queries", "world/comparisons", "world/concepts"]
+    }
+  }
+]

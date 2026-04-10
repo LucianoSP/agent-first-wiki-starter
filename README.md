@@ -19,6 +19,7 @@ capture → raw entry → route → absorb → maintain → automate
 - `scripts/run_daily.py` — runs the daily maintenance cycle
 - `scripts/run_weekly.py` — runs the weekly maintenance cycle
 - `scripts/breakdown.py` — generates a lightweight weekly breakdown report
+- `scripts/router_benchmark.py` — runs a simple routing benchmark against a case dataset
 - `templates/` — starter templates for raw entries, wiki pages, and router prompts
 - `references/example-tree.md` — example wiki structure
 
@@ -246,3 +247,15 @@ Expected output shape:
 }
 ```
 
+
+## Router benchmark
+
+A starter benchmark dataset is included at `references/router-benchmark-cases.json`.
+
+Example:
+
+```bash
+python3 scripts/router_benchmark.py /path/to/wiki references/router-benchmark-cases.json
+```
+
+This reports whether the router hits required target families like `mind/projects` or `world/concepts`, and whether it over-creates outside the allowed set for each case.
