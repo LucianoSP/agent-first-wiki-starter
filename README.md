@@ -120,3 +120,129 @@ Use this if you want:
 ## License
 
 MIT
+
+## Example outputs
+
+### `bootstrap_wiki.py`
+
+Example:
+
+```bash
+python3 scripts/bootstrap_wiki.py /tmp/my-wiki
+```
+
+Expected output shape:
+
+```json
+{
+  "root": "/tmp/my-wiki",
+  "created_dirs": 29,
+  "status_script": "/tmp/my-wiki/scripts/status.py",
+  "starter_files_copied": [
+    "/tmp/my-wiki/templates/raw-entry.md",
+    "/tmp/my-wiki/scripts/absorb.py"
+  ]
+}
+```
+
+### `write_entry.py`
+
+Example:
+
+```bash
+python3 /tmp/my-wiki/scripts/write_entry.py /tmp/my-wiki \
+  --title "First entry" \
+  --text "Testing the wiki with https://example.com"
+```
+
+Expected output:
+
+```text
+/tmp/my-wiki/raw/entries/<timestamp>-first-entry.md
+```
+
+### `absorb.py`
+
+Example:
+
+```bash
+python3 /tmp/my-wiki/scripts/absorb.py /tmp/my-wiki
+```
+
+If routing is configured correctly, expected output shape is:
+
+```json
+[
+  {
+    "entry_id": "2026-...-first-entry",
+    "status": "absorbed",
+    "summary": "short routing summary",
+    "outputs": [
+      "/tmp/my-wiki/mind/projects/example-page.md"
+    ]
+  }
+]
+```
+
+If routing is not configured, the expected failure mode is explicit:
+
+```json
+[
+  {
+    "entry_id": "2026-...-first-entry",
+    "status": "needs_review",
+    "error": "Missing API key in environment variable: WIKI_ROUTER_API_KEY",
+    "error_artifact": "/tmp/my-wiki/meta/ROUTER/errors/...json",
+    "final_path": "/tmp/my-wiki/inbox/manual-review/...md"
+  }
+]
+```
+
+### `run_daily.py`
+
+Example:
+
+```bash
+python3 /tmp/my-wiki/scripts/run_daily.py /tmp/my-wiki
+```
+
+Expected output shape:
+
+```json
+{
+  "ok": true,
+  "status_snapshot": "/tmp/my-wiki/meta/REPORTS/status-daily-YYYY-MM-DD.md",
+  "steps": [
+    {"command": ["python3", ".../absorb.py", "/tmp/my-wiki"], "exit_code": 0},
+    {"command": ["python3", ".../cleanup.py", "/tmp/my-wiki"], "exit_code": 0},
+    {"command": ["python3", ".../status.py", "/tmp/my-wiki"], "exit_code": 0}
+  ]
+}
+```
+
+### `status.py`
+
+Example:
+
+```bash
+python3 /tmp/my-wiki/scripts/status.py /tmp/my-wiki
+```
+
+Expected output shape:
+
+```json
+{
+  "root": "/tmp/my-wiki",
+  "raw_entries": 0,
+  "mind_pages": 0,
+  "world_pages": 0,
+  "manual_review_entries": 1,
+  "failed_entries": 0,
+  "reports": 1,
+  "router_prompt_artifacts": 1,
+  "router_response_artifacts": 0,
+  "router_error_artifacts": 1,
+  "router_config_present": true
+}
+```
+
